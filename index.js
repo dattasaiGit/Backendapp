@@ -1,9 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const { MongoClient, GridFSBucket } = require('mongodb');
-const razorpay = require('razorpay');
 const multer = require('multer');
-const { Readable } = require('stream');
 
 
 const app = express();
@@ -19,7 +17,6 @@ const ordersCol = db.collection('Orders');
 const cartCol = db.collection('Cart');
 const salesCol = db.collection('sales'); 
 const feedbackcol = db.collection('Feedback'); 
-const gridFSBucket = new GridFSBucket(db);
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -29,7 +26,6 @@ const storage = multer.diskStorage({
     cb(null, file.originalname);
   }
 });
-const upload = multer({ storage });
 
 
 
@@ -45,7 +41,6 @@ app.post('/login', async (req, res) => {
       return res.status(401).json({ error: 'Invalid credentials' });
     }
     res.status(200).json(user);
-    // res.status(200).json({ message: 'Login successful', userRole: user.role }); 
 
   } catch (error) {
     console.error('Error during login:', error);
